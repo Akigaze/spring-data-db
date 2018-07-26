@@ -42,4 +42,15 @@ public class EmployeeController {
         }
         return new ResponseEntity<Employee>(HttpStatus.BAD_REQUEST);
     }
+
+    @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Employee> deleteOne(@PathVariable("id") Long id){
+        Optional<Employee> byId = employeeRepository.findById(id);
+        if (byId.isPresent()){
+            employeeRepository.deleteById(id);
+            return new ResponseEntity<Employee>(byId.get(),HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
