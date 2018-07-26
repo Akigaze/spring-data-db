@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/jap/v1/companies")
@@ -38,5 +39,14 @@ public class CompanyController {
     @GetMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Company> findAll(){
         return companyRepository.findAll();
+    }
+
+    @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Company> findById(@PathVariable("id") Long id){
+        Optional<Company> byId = companyRepository.findById(id);
+        if (byId.isPresent()){
+            return new ResponseEntity<Company>(byId.get(),HttpStatus.OK);
+        }
+        return new ResponseEntity<Company>(HttpStatus.BAD_REQUEST);
     }
 }
