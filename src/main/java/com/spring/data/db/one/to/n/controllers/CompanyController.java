@@ -3,6 +3,7 @@ package com.spring.data.db.one.to.n.controllers;
 
 import com.spring.data.db.one.to.n.controllers.dto.CompanyDTO;
 import com.spring.data.db.one.to.n.entities.Company;
+import com.spring.data.db.one.to.n.entities.Employee;
 import com.spring.data.db.one.to.n.repositories.CompanyRepository;
 import com.spring.data.db.one.to.n.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,13 @@ public class CompanyController {
 
     @PostMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
     public Company save(@RequestBody Company company){
-        return companyRepository.save(company);
+        Company newer=companyRepository.save(company);
+        newer.getEmployees().stream().forEach(emp->emp.setCompany(newer));
+        return newer;
+    }
+
+    @GetMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Company> findAll(){
+        return companyRepository.findAll();
     }
 }
