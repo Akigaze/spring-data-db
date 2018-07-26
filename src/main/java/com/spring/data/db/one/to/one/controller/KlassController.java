@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/jpa/v3/classes")
@@ -38,5 +37,11 @@ public class KlassController {
         Klass klz=klassRepository.save(klass);
         klz.getLeader().setKlass(klz);
         return new ResponseEntity<Klass>(klz,HttpStatus.OK);
+    }
+
+    @GetMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Klass>> findAll(){
+        List<Klass> klasses=klassRepository.findAll();
+        return new ResponseEntity<List<Klass>>(klasses,HttpStatus.OK);
     }
 }
