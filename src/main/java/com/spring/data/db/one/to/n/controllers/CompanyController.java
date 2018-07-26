@@ -20,5 +20,10 @@ public class CompanyController {
 
     private CompanyRepository repository;
 
-
+    public CompanyController() {
+    }
+    @Autowired
+    public CompanyController(CompanyRepository repository) {
+        this.repository = repository;
+    }
 }
