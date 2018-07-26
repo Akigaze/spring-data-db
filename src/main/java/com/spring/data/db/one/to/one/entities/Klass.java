@@ -6,10 +6,11 @@ import javax.persistence.*;
 @Table(name = "tb_class")
 public class Klass {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "leader_id")
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name = "leader_id")
     private Leader leader;
 
     public Klass() {

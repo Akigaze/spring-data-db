@@ -1,16 +1,20 @@
 package com.spring.data.db.one.to.one.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tb_leader")
 public class Leader {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String gender;
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "class_id")
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id")
     private Klass klass;
 
     public Leader() {
