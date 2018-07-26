@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "c087586b-b296-4cfc-ba03-c11a5672fb8d",
+		"name": "jap-db",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"_postman_id": "fffd186c-4667-4b90-98a8-42e6b2f85952",
+			"name": "one-to-one",
+			"item": [
+				{
+					"_postman_id": "8acfa6ec-c26f-4afa-9669-db951066bfac",
+					"name": "Add Klass",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"3班\",\n\t\"leader\":{\n\t\t\"name\":\"小米\",\n\t\t\"gender\":\"male\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jpa/v3/classes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jpa",
+								"v3",
+								"classes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "54e9fc4f-5e10-4119-8a81-cbbbcd175d13",
+					"name": "Add Leader",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Tom\",\n\t\"gender\":\"male\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jpa/v4/leaders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jpa",
+								"v4",
+								"leaders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "9c78b332-7daf-4918-9615-e13a4592c35e",
+			"name": "one-to-n",
+			"item": [
+				{
+					"_postman_id": "8f434c5e-75cc-4fcb-965f-3637dfc473e5",
+					"name": "Add employee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Amy\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jap/v2/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v2",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "1051e6f5-6771-423c-8332-69781e77cf7c",
+					"name": "Add company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"IBM\",\n\t\"employees\":[\n\t\t{\n\t\t\t\"name\":\"Jack\"\n\t\t}]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "0990fa7f-5d11-4ef0-8929-7f9e9b80d51c",
+					"name": "Get all company",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "0eaaaf43-869f-4c2b-bf4a-84dba069e74c",
+					"name": "Get all employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v2/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v2",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "c61e6b78-c2b1-47c5-8123-59a06b864535",
+					"name": "Get company by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "7873009b-8ba1-4a8b-b28f-cee298543a70",
+					"name": "Get employee by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v2/employees/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v2",
+								"employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "de9163f1-19ec-4d81-ad67-29cff3769f67",
+					"name": "Delete employee by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v2/employees/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v2",
+								"employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "4c35c233-bfa1-464d-9b93-fa75d6c70bdb",
+					"name": "Delete company by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "e884b4bc-86de-4cc2-a0f1-4d25b1520152",
+					"name": "Update employee",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Mahuateng\",\n    \"createdDate\": \"2018-07-27T00:45:32.198+08:00\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jap/v2/employees/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v2",
+								"employees",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "88515368-a380-4d98-8b9d-6f78eef6cd02",
+					"name": "Update company",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 3,\n    \"name\": \"Tencent\",\n    \"createdDate\": \"2018-07-27T00:48:05.893+08:00\",\n    \"employees\": [\n        {\n            \"name\": \"Amy\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"_postman_id": "31ed2260-3da7-4a58-bf59-50c4b510c798",
+					"name": "Get employees by company ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/jap/v1/companies/1/employees",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"jap",
+								"v1",
+								"companies",
+								"1",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"_postman_id": "57164c98-848c-44b5-9d17-fcc55e5a932d",
+			"name": "Get all klasses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/jpa/v3/classes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jpa",
+						"v3",
+						"classes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"_postman_id": "ac9482c0-feed-4aa3-a3fd-302170acae97",
+			"name": "Get all leaders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/jpa/v4/leaders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jpa",
+						"v4",
+						"leaders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
