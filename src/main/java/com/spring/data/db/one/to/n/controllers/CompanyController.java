@@ -62,4 +62,27 @@ public class CompanyController {
             return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(@RequestBody Company company,@PathVariable("id") Long id){
+        company.setId(id);
+        Optional<Company> byId = companyRepository.findById(id);
+        if (byId.isPresent()){
+            companyRepository.save(company);
+            company.getEmployees().forEach(employee -> {
+                if (employee.getCompany()==null){
+                    employee.setCompany(company);
+                }
+            });
+            return new ResponseEntity<Company>(company,HttpStatus.OK);
+        }else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(path = "/{id}/employees",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Employee>> getEmployees(@PathVariable("id") Long id){
+        List<Employee> employees= companyRepository.findEmployeesByCompanyId(id);
+        return new ResponseEntity<List<Employee>>(employees,HttpStatus.OK);
+    }
 }

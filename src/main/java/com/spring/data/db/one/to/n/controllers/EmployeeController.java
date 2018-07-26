@@ -53,4 +53,17 @@ public class EmployeeController {
             return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(@RequestBody Employee employee,@PathVariable("id") Long id){
+        employee.setId(id);
+        Optional<Employee> byId = employeeRepository.findById(id);
+        if (byId.isPresent()){
+            employeeRepository.save(employee);
+            return new ResponseEntity(HttpStatus.OK);
+        }else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }
