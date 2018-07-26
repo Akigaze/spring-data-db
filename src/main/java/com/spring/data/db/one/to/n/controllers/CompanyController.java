@@ -49,4 +49,17 @@ public class CompanyController {
         }
         return new ResponseEntity<Company>(HttpStatus.BAD_REQUEST);
     }
+
+    @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Company> deleteOne(@PathVariable("id") Long id){
+        Optional<Company> byId = companyRepository.findById(id);
+        if (byId.isPresent()){
+            Company company=byId.get();
+            companyRepository.deleteById(id);
+            company.getEmployees().forEach(employee -> employee.setCompany(null));
+            return new ResponseEntity<Company>(company,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
