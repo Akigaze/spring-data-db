@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tb_class")
 public class Klass {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "leader_id")
