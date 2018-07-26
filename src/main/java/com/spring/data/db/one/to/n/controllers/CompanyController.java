@@ -15,15 +15,20 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/companies")
+@RequestMapping("/jap/v1/companies")
 public class CompanyController {
 
-    private CompanyRepository repository;
+    private CompanyRepository companyRepository;
 
     public CompanyController() {
     }
     @Autowired
     public CompanyController(CompanyRepository repository) {
-        this.repository = repository;
+        this.companyRepository = repository;
+    }
+
+    @PostMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
+    public Company save(@RequestBody Company company){
+        return companyRepository.save(company);
     }
 }

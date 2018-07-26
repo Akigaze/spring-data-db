@@ -18,6 +18,8 @@ public class Company {
     @CreatedDate
     private ZonedDateTime createdDate=ZonedDateTime.now();
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "company")
+    private List<Employee> employees;
 
     public Company() {
     }
