@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class KlassController {
         this.klassRepository = klassRepository;
     }
 
+    @Transactional
     @PostMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Klass> save(@RequestBody Klass klass){
         Klass klz=klassRepository.save(klass);
@@ -52,6 +54,18 @@ public class KlassController {
         Optional<Klass> byId = klassRepository.findById(id);
         if (byId.isPresent()){
             Klass klass=byId.get();
+            return new ResponseEntity<Klass>(klass,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Klass>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @Transactional
+    @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Klass> deleteOne(@PathVariable("id") Long id){
+        Optional<Klass> byId = klassRepository.findById(id);
+        if (byId.isPresent()){
+            Klass klass=byId.get();
+            klassRepository.delete(klass);
             return new ResponseEntity<Klass>(klass,HttpStatus.OK);
         }else {
             return new ResponseEntity<Klass>(HttpStatus.NOT_FOUND);

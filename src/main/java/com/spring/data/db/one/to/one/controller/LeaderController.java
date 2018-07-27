@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ public class LeaderController {
     public void setLeaderRepository(LeaderRepository leaderRepository) {
         this.leaderRepository = leaderRepository;
     }
-
+    @Transactional
     @PostMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Leader> save(@RequestBody Leader leader){
         Leader ldr=leaderRepository.save(leader);
@@ -51,6 +52,19 @@ public class LeaderController {
         Optional<Leader> byId = leaderRepository.findById(id);
         if (byId.isPresent()){
             Leader leader=byId.get();
+            return new ResponseEntity<Leader>(leader,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Leader>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @Transactional
+    @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Leader> deleteOne(@PathVariable("id") Long id){
+        Optional<Leader> byId = leaderRepository.findById(id);
+        if (byId.isPresent()){
+            Leader leader=byId.get();
+            leaderRepository.delete(leader);
+            leader.getKlass().setLeader(null);
             return new ResponseEntity<Leader>(leader,HttpStatus.OK);
         }else {
             return new ResponseEntity<Leader>(HttpStatus.NOT_FOUND);
