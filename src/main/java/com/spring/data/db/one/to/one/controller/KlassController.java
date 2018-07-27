@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/jpa/v3/classes")
@@ -43,5 +44,17 @@ public class KlassController {
     public ResponseEntity<List<Klass>> findAll(){
         List<Klass> klasses=klassRepository.findAll();
         return new ResponseEntity<List<Klass>>(klasses,HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Klass> findById(@PathVariable("id") Long id){
+
+        Optional<Klass> byId = klassRepository.findById(id);
+        if (byId.isPresent()){
+            Klass klass=byId.get();
+            return new ResponseEntity<Klass>(klass,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Klass>(HttpStatus.NOT_FOUND);
+        }
     }
 }

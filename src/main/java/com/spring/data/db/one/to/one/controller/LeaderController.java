@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/jpa/v4/leaders")
@@ -43,5 +44,16 @@ public class LeaderController {
     public ResponseEntity<List<Leader>> findAll(){
         List<Leader> leaders=leaderRepository.findAll();
         return new ResponseEntity<List<Leader>>(leaders,HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Leader> findById(@PathVariable("id") Long id){
+        Optional<Leader> byId = leaderRepository.findById(id);
+        if (byId.isPresent()){
+            Leader leader=byId.get();
+            return new ResponseEntity<Leader>(leader,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<Leader>(HttpStatus.NOT_FOUND);
+        }
     }
 }
