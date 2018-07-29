@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -60,6 +61,17 @@ public class EmployeeControllerTest {
                 .content(mapper.writeValueAsString(new EmployeeDTO(mayun))));
 
         result.andExpect(status().isOk()).andDo(print());
+    }
 
+    @Test
+    public void should_get_info_of_specific_employee_when_give_the_id() throws Exception {
+        Employee mayun =new Employee(1L,"Mayun");
+        Employee mahuateng =new Employee(2L,"Mahuateng");
+        List<Employee> employees=Arrays.asList(mayun,mahuateng);
+        List<EmployeeDTO> dtos=Arrays.asList(new EmployeeDTO(mayun),new EmployeeDTO(mahuateng));
+        given(repository.findById(1L)).willReturn(Optional.of(mayun));
+        mockMvc.perform(get("/jap/v2/employees/1")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name",is("Mayun")))
+                .andExpect(jsonPath("$.id",is(1)));
     }
 }

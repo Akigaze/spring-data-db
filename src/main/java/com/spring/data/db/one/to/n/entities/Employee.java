@@ -40,6 +40,10 @@ public class Employee {
         this.id=id;
     }
 
+    public Employee(Long id, String name) {
+        this(id,name,"male");
+    }
+
     public Long getId() {
         return id;
     }
