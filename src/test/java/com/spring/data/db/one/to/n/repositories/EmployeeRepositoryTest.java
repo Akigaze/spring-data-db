@@ -32,14 +32,29 @@ public class EmployeeRepositoryTest {
 
     @Test
     public void should_get_info_of_all_employees(){
+        //give
         entityManager.persist(new Employee("Quinn","male"));
         entityManager.persist(new Employee("Hoho","female"));
+        //when
         List<Employee> employees=repository.findAll();
-
+        //then
         assertThat(employees.size(),is(2));
         assertThat(employees.get(0).getName(),is("Quinn"));
         assertThat(employees.get(0).getGender(),is("male"));
         assertThat(employees.get(1).getName(),is("Hoho"));
         assertThat(employees.get(1).getGender(),is("female"));
+    }
+
+    @Test
+    public void should_get_info_of_specific_employee_when_give_an_id(){
+        //give
+        Long id=Long.valueOf(entityManager.persistAndGetId(new Employee("Quinn","male")).toString());
+        entityManager.persistAndGetId(new Employee("Hoho","female"));
+        //when
+        Employee employee=repository.findById(id).get();
+        //then
+
+        assertThat(employee.getName(),is("Quinn"));
+        assertThat(employee.getGender(),is("male"));
     }
 }
