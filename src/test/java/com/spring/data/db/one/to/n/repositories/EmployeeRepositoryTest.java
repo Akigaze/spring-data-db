@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -100,7 +101,7 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_get_male_employees_when_find_male() {
         //given
-        Employee maleGiven=entityManager.persist(new Employee("Hoho", "fmale"));
+        Employee maleGiven=entityManager.persist(new Employee("Hoho", "female"));
         Employee femaleGiven=entityManager.persist(new Employee("Quinn", "male"));
         //when
         List<Employee> males=repository.findByGender("male");
@@ -108,5 +109,23 @@ public class EmployeeRepositoryTest {
         //then
         MatcherAssert.assertThat(males.size(), is(1));
         MatcherAssert.assertThat(males.get(0).getName(), is("Quinn"));
+    }
+
+    @Test
+    public void should_two_employees_in_a_page_when_set_one_page_size_2() {
+        //given
+        entityManager.persist(new Employee("Bale", "male"));
+        entityManager.persist(new Employee("Jeffry", "male"));
+        entityManager.persist(new Employee("Quinn", "male"));
+        entityManager.persist(new Employee("Hoho", "female"));
+        entityManager.persist(new Employee("Tracy", "female"));
+        //when
+        List<Employee> employees=repository.findAll(PageRequest.of(1,2)).getContent();
+
+        //then
+        assertThat(employees.size(), is(2));
+        assertThat(employees.get(0).getName(), is("Quinn"));
+        assertThat(employees.get(1).getName(), is("Hoho"));
+
     }
 }
