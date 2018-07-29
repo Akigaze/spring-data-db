@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -99,4 +102,15 @@ public class EmployeeControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    public void should_two_employees_in_a_page_when_set_one_page_size_2() throws Exception {
+        Employee mayun =new Employee("Mayun");
+        Employee mahuateng =new Employee("Mahuateng");
+        List<Employee> employees=Arrays.asList(mayun,mahuateng);
+        given(repository.findAll(PageRequest.of(0,2))).willReturn(new PageImpl<Employee>(employees));
+        mockMvc.perform(get("/jap/v2/employees?page=1&size=2")).andExpect(status().isOk())
+                .andExpect(jsonPath("$",hasSize(2)))
+                .andExpect(jsonPath("$[0].name",is("Mayun")))
+                .andExpect(jsonPath("$[1].name",is("Mahuateng")));
+    }
 }
