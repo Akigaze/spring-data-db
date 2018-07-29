@@ -1,0 +1,1 @@
+create database jpa_practice_db;
