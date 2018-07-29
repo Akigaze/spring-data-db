@@ -83,4 +83,20 @@ public class EmployeeControllerTest {
         ResultActions result = mockMvc.perform(delete("/jap/v2/employees/1"));
         result.andExpect(status().isOk()).andDo(print());
     }
+
+    @Test
+    public void should_update_info_of_specific_employee_when_give_new_info()throws Exception{
+        Employee mayun = new Employee(1L,"Mayun");
+        Employee mahuateng = new Employee(1L,"Mahuateng");
+
+        //when
+        when(repository.findById(1L)).thenReturn(Optional.of(mayun));
+        ResultActions result = mockMvc.perform(put("/jap/v2/employees/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(mahuateng)));
+        //then
+        result.andExpect(status().isNoContent())
+                .andDo(print());
+    }
+
 }
