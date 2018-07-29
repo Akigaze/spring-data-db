@@ -74,4 +74,13 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.name",is("Mayun")))
                 .andExpect(jsonPath("$.id",is(1)));
     }
+
+    @Test
+    public void should_delete_the_specific_employee_when_give_id() throws Exception {
+
+        Employee mayun = new Employee(1L,"Mayun");
+        given(repository.findById(1L)).willReturn(Optional.of(mayun));
+        ResultActions result = mockMvc.perform(delete("/jap/v2/employees/1"));
+        result.andExpect(status().isOk()).andDo(print());
+    }
 }
