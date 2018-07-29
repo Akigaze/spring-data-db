@@ -83,21 +83,13 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/male",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeDTO> findMale(){
-        Optional<Employee> byGender = employeeRepository.findByGender("male");
-        if (byGender.isPresent()){
-            return new ResponseEntity<EmployeeDTO>(new EmployeeDTO(byGender.get()),HttpStatus.OK);
-        }
-        return new ResponseEntity<EmployeeDTO>(HttpStatus.BAD_REQUEST);
+    public List<EmployeeDTO> findMale(){
+        return employeeRepository.findByGender("male").stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/female",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeDTO> findFemale(){
-        Optional<Employee> byGender = employeeRepository.findByGender("female");
-        if (byGender.isPresent()){
-            return new ResponseEntity<EmployeeDTO>(new EmployeeDTO(byGender.get()),HttpStatus.OK);
-        }
-        return new ResponseEntity<EmployeeDTO>(HttpStatus.BAD_REQUEST);
+    public List<EmployeeDTO> findFemale(){
+        return employeeRepository.findByGender("female").stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
     }
 }
 

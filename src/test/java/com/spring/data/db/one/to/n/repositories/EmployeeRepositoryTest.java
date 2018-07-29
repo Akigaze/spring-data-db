@@ -2,6 +2,8 @@ package com.spring.data.db.one.to.n.repositories;
 
 import com.spring.data.db.one.to.n.entities.Employee;
 import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,12 +63,12 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_save_a_given_employee(){
         //give
-        Employee given=new Employee("Quinn","male");
+        Employee given=new Employee(10L,"Quinn","male");
         //when
-        repository.save(given);
+        Employee saved=repository.save(given);
         //then
-        assertThat(repository.findById(1L).get().getName(),is("Quinn"));
-        assertThat(repository.findById(1L).get().getGender(),is("male"));
+        assertThat(saved.getName(),is("Quinn"));
+        assertThat(saved.getGender(),is("male"));
     }
 
     @Test
@@ -79,5 +81,32 @@ public class EmployeeRepositoryTest {
         //then
         assertThat(repository.findById(saved.getId()).get().getName(),is("Hoho"));
         assertThat(repository.findById(saved.getId()).get().getGender(),is("female"));
+    }
+
+    @Test
+    public void should_delete_the_specific_employee_by_given_id() {
+        //given
+        entityManager.clear();
+
+        entityManager.persist(new Employee("Quinn", "male"));
+        //when
+        Long id = Long.valueOf(entityManager.persistAndGetId(new Employee("Hoho", "female")).toString());
+        repository.deleteById(id);
+
+        //then
+        MatcherAssert.assertThat(repository.findAll().size(), CoreMatchers.is(1));
+    }
+
+    @Test
+    public void should_get_male_employees_when_find_male() {
+        //given
+        Employee maleGiven=entityManager.persist(new Employee("Hoho", "fmale"));
+        Employee femaleGiven=entityManager.persist(new Employee("Quinn", "male"));
+        //when
+        List<Employee> males=repository.findByGender("male");
+
+        //then
+        MatcherAssert.assertThat(males.size(), is(1));
+        MatcherAssert.assertThat(males.get(0).getName(), is("Quinn"));
     }
 }
