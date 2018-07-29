@@ -57,4 +57,15 @@ public class EmployeeRepositoryTest {
         assertThat(employee.getName(),is("Quinn"));
         assertThat(employee.getGender(),is("male"));
     }
+
+    @Test
+    public void should_save_a_given_employee(){
+        //give
+        Employee given=new Employee("Quinn","male");
+        //when
+        repository.save(given);
+        //then
+        assertThat(repository.findById(1L).get().getName(),is("Quinn"));
+        assertThat(repository.findById(1L).get().getGender(),is("male"));
+    }
 }
