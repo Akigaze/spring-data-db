@@ -8,6 +8,10 @@ import com.spring.data.db.one.to.n.entities.Employee;
 import com.spring.data.db.one.to.n.repositories.CompanyRepository;
 import com.spring.data.db.one.to.n.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +44,13 @@ public class CompanyController {
     }
 
     @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<CompanyDTO> findAll() {
-        return companyRepository.findAll().stream().map(company -> new CompanyDTO(company)).collect(Collectors.toList());
+    public List<CompanyDTO> findAll(@Param("page") Integer page,@Param("size") Integer size) {
+        if (page!=null&&size!=null){
+            Page<Company> all = companyRepository.findAll(PageRequest.of(page-1, size));
+            return all.getContent().stream().map(company -> new CompanyDTO(company)).collect(Collectors.toList());
+        }else {
+            return companyRepository.findAll().stream().map(company -> new CompanyDTO(company)).collect(Collectors.toList());
+        }
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
