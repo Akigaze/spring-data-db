@@ -68,4 +68,16 @@ public class EmployeeRepositoryTest {
         assertThat(repository.findById(1L).get().getName(),is("Quinn"));
         assertThat(repository.findById(1L).get().getGender(),is("male"));
     }
+
+    @Test
+    public void should_update_info_of_given_employee(){
+        //give
+        Employee saved=entityManager.persistAndFlush(new Employee("Quinn","male"));
+        Employee given=new Employee(saved.getId(),"Hoho","female");
+        //when
+        repository.save(given);
+        //then
+        assertThat(repository.findById(saved.getId()).get().getName(),is("Hoho"));
+        assertThat(repository.findById(saved.getId()).get().getGender(),is("female"));
+    }
 }
