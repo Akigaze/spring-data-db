@@ -5,6 +5,9 @@ import com.spring.data.db.one.to.n.entities.Company;
 import com.spring.data.db.one.to.n.entities.Employee;
 import com.spring.data.db.one.to.n.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +36,18 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<EmployeeDTO> findAll(){
-        List<Employee> emps=employeeRepository.findAll();
-        List<EmployeeDTO> dtos= new ArrayList<>();
-        for (Employee e:emps){
-            dtos.add(new EmployeeDTO(e));
+    public List<EmployeeDTO> findAll(@Param("page") Integer page,@Param("size") Integer size){
+        if (page!=null&&size!=null){
+            Page<Employee> all = employeeRepository.findAll(PageRequest.of(page-1, size));
+            return all.getContent().stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
+        }else {
+            List<Employee> emps = employeeRepository.findAll();
+            List<EmployeeDTO> dtos = new ArrayList<>();
+            for (Employee e : emps) {
+                dtos.add(new EmployeeDTO(e));
+            }
+            return dtos;
         }
-        return dtos;
-        //return employeeRepository.findAll().stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
