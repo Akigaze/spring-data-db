@@ -2,6 +2,7 @@ package com.spring.data.db.one.to.n.controllers;
 
 
 import com.spring.data.db.one.to.n.controllers.dto.CompanyDTO;
+import com.spring.data.db.one.to.n.controllers.dto.EmployeeDTO;
 import com.spring.data.db.one.to.n.entities.Company;
 import com.spring.data.db.one.to.n.entities.Employee;
 import com.spring.data.db.one.to.n.repositories.CompanyRepository;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/jap/v1/companies")
@@ -24,65 +26,67 @@ public class CompanyController {
 
     public CompanyController() {
     }
+
     @Autowired
     public CompanyController(CompanyRepository repository) {
         this.companyRepository = repository;
     }
 
-    @PostMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
-    public Company save(@RequestBody Company company){
-        Company newer=companyRepository.save(company);
-        newer.getEmployees().stream().forEach(emp->emp.setCompany(newer));
-        return newer;
+    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CompanyDTO save(@RequestBody Company company) {
+        Company newer = companyRepository.save(company);
+        newer.getEmployees().stream().forEach(emp -> emp.setCompany(newer));
+        return new CompanyDTO(newer);
     }
 
-    @GetMapping(path = "",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Company> findAll(){
-        return companyRepository.findAll();
+    @GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<CompanyDTO> findAll() {
+        return companyRepository.findAll().stream().map(company -> new CompanyDTO(company)).collect(Collectors.toList());
     }
 
-    @GetMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Company> findById(@PathVariable("id") Long id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDTO> findById(@PathVariable("id") Long id) {
         Optional<Company> byId = companyRepository.findById(id);
-        if (byId.isPresent()){
-            return new ResponseEntity<Company>(byId.get(),HttpStatus.OK);
+        if (byId.isPresent()) {
+            return new ResponseEntity<CompanyDTO>(new CompanyDTO(byId.get()), HttpStatus.OK);
         }
-        return new ResponseEntity<Company>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<CompanyDTO>(HttpStatus.BAD_REQUEST);
     }
 
-    @DeleteMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Company> deleteOne(@PathVariable("id") Long id){
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDTO> deleteOne(@PathVariable("id") Long id) {
         Optional<Company> byId = companyRepository.findById(id);
-        if (byId.isPresent()){
-            Company company=byId.get();
+        if (byId.isPresent()) {
+            Company company = byId.get();
             companyRepository.deleteById(id);
             company.getEmployees().forEach(employee -> employee.setCompany(null));
-            return new ResponseEntity<Company>(company,HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Company>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<CompanyDTO>(new CompanyDTO(byId.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<CompanyDTO>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping(path = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity update(@RequestBody Company company,@PathVariable("id") Long id){
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(@RequestBody Company company, @PathVariable("id") Long id) {
         company.setId(id);
         Optional<Company> byId = companyRepository.findById(id);
-        if (byId.isPresent()){
+        if (byId.isPresent()) {
             companyRepository.save(company);
             company.getEmployees().forEach(employee -> {
-                if (employee.getCompany()==null){
+                if (employee.getCompany() == null) {
                     employee.setCompany(company);
                 }
             });
-            return new ResponseEntity<Company>(company,HttpStatus.OK);
-        }else {
+            return new ResponseEntity<Company>(company, HttpStatus.OK);
+        } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 
+
     @GetMapping(path = "/{id}/employees",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Employee>> getEmployees(@PathVariable("id") Long id){
-        List<Employee> employees= companyRepository.findEmployeesByCompanyId(id);
-        return new ResponseEntity<List<Employee>>(employees,HttpStatus.OK);
+    public ResponseEntity<List<EmployeeDTO>> getEmployees(@PathVariable("id") Long id){
+        List<EmployeeDTO> employees= companyRepository.findEmployeesByCompanyId(id).stream().map(employee -> new EmployeeDTO(employee)).collect(Collectors.toList());
+        return new ResponseEntity<List<EmployeeDTO>>(employees,HttpStatus.OK);
     }
 }

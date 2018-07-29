@@ -58,5 +58,6 @@ public class Company {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+        this.employees.stream().forEach(employee -> employee.setCompany(this));
     }
 }
