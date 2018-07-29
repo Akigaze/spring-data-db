@@ -2,9 +2,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver #数据库连接驱动
-    url: jdbc:mysql://192.168.99.100:3306/jpa_practice_db?useSSL=false #数据库连接的url
+    # url: jdbc:mysql://192.168.99.100:3306/jpa_practice_db?useSSL=false #数据库连接的url
+    url: jdbc:mysql://localhost:3306/jpa_practice_db?useSSL=false #数据库连接的url
     username: root #用户名
-    password: 123456 #用户密码
+    # password: 123456 #用户密码
+    password: akigaze #用户密码
+
   jpa:
     hibernate:
       ddl-auto: create #每次启动应用都自动删除数据库中的表，在根据Entity的配置自动创建数据表
