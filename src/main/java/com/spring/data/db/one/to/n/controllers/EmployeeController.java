@@ -82,5 +82,22 @@ public class EmployeeController {
         }
     }
 
+    @GetMapping(path = "/male",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmployeeDTO> findMale(){
+        Optional<Employee> byGender = employeeRepository.findByGender("male");
+        if (byGender.isPresent()){
+            return new ResponseEntity<EmployeeDTO>(new EmployeeDTO(byGender.get()),HttpStatus.OK);
+        }
+        return new ResponseEntity<EmployeeDTO>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(path = "/female",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EmployeeDTO> findFemale(){
+        Optional<Employee> byGender = employeeRepository.findByGender("female");
+        if (byGender.isPresent()){
+            return new ResponseEntity<EmployeeDTO>(new EmployeeDTO(byGender.get()),HttpStatus.OK);
+        }
+        return new ResponseEntity<EmployeeDTO>(HttpStatus.BAD_REQUEST);
+    }
 }
 
