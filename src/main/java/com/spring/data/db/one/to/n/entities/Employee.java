@@ -30,6 +30,11 @@ public class Employee {
         this.name = name;
     }
 
+    public Employee(String name, String gender) {
+        this.name = name;
+        this.gender = gender;
+    }
+
     public Long getId() {
         return id;
     }
